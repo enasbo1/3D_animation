@@ -1,4 +1,4 @@
-from backwork.Item import*
+from backwork.Item import *
 
 def affiche_pixels(toile, FPS, pixels, x, y, cam, plan): #certifié
     cam.place()

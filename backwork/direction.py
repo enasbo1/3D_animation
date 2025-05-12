@@ -1,4 +1,6 @@
-from math import*
+from math import *
+
+
 def tourne(ditem, direction, vitesse):
     if abs(ditem-direction)>pi:
         if direction<0:
@@ -13,17 +15,25 @@ def tourne(ditem, direction, vitesse):
     else:
         ditem=direction
     return(ditem)
+
+
 def avix(a,d):
     x=cos(d)*a
     return(x)
+
+
 def aviy(a,d):
     x=sin(d)*a
     return(x)
+
+
 def dis(a,b,x,y):
     x1=x-a
     y1=y-b
     n=sqrt(y1**2+x1**2)
     return(n)
+
+
 def rot(r,d):
     d+=r
     if d>pi:
@@ -31,6 +41,7 @@ def rot(r,d):
     if d<-pi:
         d=d+(2*pi)
     return(d)
+
 
 def dir(a,b,d,x,y):
     x1=x-a
@@ -55,6 +66,7 @@ def dir(a,b,d,x,y):
     L=rot(d,L)
     return(L)
 
+
 def lim(x,x1,y,y1,a,b,d):
     if b<y or b>y1:
         d=-d
@@ -63,6 +75,8 @@ def lim(x,x1,y,y1,a,b,d):
     if a>x1:
         d=-d+pi
     return(d)
+
+
 def limxy(a,b,x,x1,y,y1):
     while a<x:
         a=x+5
@@ -73,3 +87,59 @@ def limxy(a,b,x,x1,y,y1):
     while b>y1:
         b=y1-5
     return(a,b)
+
+
+def disrap(a,b,x,y):
+    x1=x-a
+    y1=y-b
+    n=y1**2+x1**2
+    return(n)
+
+
+def scalar(v1: tuple[float, float], v2: tuple[float, float]) -> float:
+    return v1[0]*v2[0]+v1[1]*v2[1]
+
+
+def side(v1: tuple[float, float], v2: tuple[float, float]) -> float:
+    return v1[1]*v2[0]-v1[0]*v2[1]
+
+
+def rotate(v: tuple[float, float]) -> tuple[float, float]:
+    return -v[1], v[0]
+
+
+def change_ref(x: float, y: float, coords: tuple[tuple[float, float]]) -> tuple[tuple[float, ...], ...]:
+    return tuple([tuple([i[0]+x, i[1]+y]) for i in coords])
+
+
+def vector(a: tuple[float, float], b: tuple[float, float]) -> tuple[float, float]:
+    return b[0]-a[0],b[1]-a[1]
+
+
+def sum_vectors(a: tuple[float, float], b: tuple[float, float]) -> tuple[float, float]:
+    return a[0]+b[0],a[1]+b[1]
+
+
+def multiply_vector(a: tuple[float, float], fact: float) -> tuple[float, float]:
+    return a[0]*fact,a[1]*fact
+
+
+def moy_vector(a: tuple[float, float], b: tuple[float, float]):
+    return (a[0]+b[0])/2,(a[1]+b[1])/2
+
+
+def norme2(a: tuple[float, float]):
+    return (a[0]**2) + (a[1]**2)
+
+
+def norme(a: tuple[float, float]):
+    return sqrt((a[0]**2) + (a[1]**2))
+
+
+def unit_vect(a: tuple[float, float]):
+    n = norme(a)
+    return a[0] / n, a[1] / n
+
+
+def fact_vect(a: tuple[float, float], fact: float):
+    return a[0]*fact, a[1]*fact

@@ -1,5 +1,6 @@
 import math
 
+
 class Vector3D:
     def __init__(self, x, y, z):
         self.__coord:tuple[float, float, float] = (x, y, z)

@@ -18,7 +18,7 @@ class PygIO:
         self.height = n.current_h
         self.clock = pyg.time.Clock()
         self.running = True
-        self.screen_color = '#81A4B5'
+        self.screen_color = '#555555'
         self.draw = pyg.draw
 
     def prepare_update(self):

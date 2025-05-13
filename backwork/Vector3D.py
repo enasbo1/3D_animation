@@ -1,19 +1,36 @@
 import math
 
+from backwork.Vector2D import Vector2D
+from backwork.dddirection import avixyz
 
-class Vector3D:
-    def __init__(self, x, y, z):
+class IVector3D:
+    x:float
+    y:float
+    z:float
+
+class Vector3D(IVector3D):
+    def __init__(self, x:float, y:float, z:float):
         self.__coord:tuple[float, float, float] = (x, y, z)
 
 
     @staticmethod
     def zero():
-            return Vector3D(0, 0, 0)
+        return Vector3D(0, 0, 0)
 
-    def __add__(self, other):
+    @staticmethod
+    def from_polar(d:float, v:float, norm:float = 1.):
+        return Vector3D(*avixyz(norm, d, v))
+
+    def scalar(self, other:IVector3D)->float:
+        return self.x * other.x + self.y * other.y + self.z * other.z
+
+    def project_h(self) -> Vector2D:
+        return Vector2D(self.x, self.y)
+
+    def __add__(self, other:IVector3D):
         return Vector3D(self.x + other.x, self.y + other.y, self.z + other.z)
 
-    def __sub__(self, other):
+    def __sub__(self, other:IVector3D):
         return Vector3D(self.x - other.x, self.y - other.y, self.z - other.z)
 
     def __mul__(self, value:float|int):

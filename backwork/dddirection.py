@@ -1,10 +1,10 @@
-from math import*
 from backwork.direction import*
-def avixyz(a,d,v):
+
+def avixyz(a : float,d : float,v : float) -> tuple[float, float, float]:
     x=cos(v)*cos(d)*a
     y=cos(v)*sin(d)*a
     z=sin(v)*a
-    return(x,y,z)
+    return x,y,z
 
 def ddis(a,b,c,x,y,z):
     x1=x-a

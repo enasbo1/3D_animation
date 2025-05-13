@@ -10,10 +10,16 @@ class Vector2D:
         return Vector2D(0, 0)
 
     @staticmethod
-    def from_exp(angle:float, norm:float):
+    def from_exp(angle:float, norm:float=1.):
         n = Vector2D(0, 0)
         n.exponential = angle, norm
         return n
+
+    def scalar(self, other)->float:
+        return (self.x * other.x) + (self.x * other.y)
+
+    def normal_scalar(self, other)->float:
+        return  self.y * other.x-self.x * other.y;
 
     def __add__(self, other):
         return Vector2D(self.x + other.x, self.y + other.y)
@@ -40,10 +46,10 @@ class Vector2D:
         return self.__coord[1]
 
     def __set_x(self, x:float):
-        self.__coord = (x, self.y);
+        self.__coord = x, self.y
 
     def __set_y(self, y:float):
-        self.__coord = (self.x, y);
+        self.__coord = self.x, y
 
     def __get_angle(self)->float:
         return math.atan2(self.__coord[1], self.__coord[0])
@@ -62,16 +68,19 @@ class Vector2D:
     def __set_exp(self, exp:tuple[float, float]):
         """
             la forme exponentielle est un tuple(angle, norme);
-            /!\ set & get la forme exponentielle est à faire avec moderation
+            /!\\ set & get la forme exponentielle est à faire avec moderation
         """
         self.__coord = (exp[1]*math.cos(exp[0]), exp[1]*math.sin(exp[0]))
 
     def __get_exp(self)->tuple[float, float]:
         """
             la forme exponentielle est un tuple(angle, norme);
-            /!\ set & get la forme exponentielle est à faire avec moderation
+            /!\\ set & get la forme exponentielle est à faire avec moderation
         """
         return self.__get_angle(), self.__get_norm()
+
+    def squareNorm(self):
+        return self.__get_x()**2+self.__get_y()**2
 
     coord:tuple[float, float] = property(__get_coord)
     x:float = property(__get_x, __set_x)

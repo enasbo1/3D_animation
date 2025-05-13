@@ -1,6 +1,7 @@
 import time
 
 from engine.pygio import PygIO, pyg
+from engine.render import Render, Camera
 
 
 class Worker:
@@ -18,6 +19,8 @@ class Worker:
         self.physStepDuration = 0.03
         self.keysInput: pyg.ScancodeWrapper = None
         self.show_over = lambda piGio: None
+        self.renderer:Render = Render()
+        self.activeCamera = Camera(0,0,0)
         game.onCreate()
 
     def start(self):
@@ -38,6 +41,8 @@ class Worker:
 
         for i in self.activeMBList:
             i.show(self.pygIO)
+
+        self.renderer.showFaces(self.activeCamera, self.pygIO)
 
         self.show_over(self.pygIO)
 

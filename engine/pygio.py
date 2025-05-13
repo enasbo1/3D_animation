@@ -1,3 +1,4 @@
+from collections.abc import Sequence
 from random import randint
 
 import pygame as pyg
@@ -52,7 +53,7 @@ class PygIO:
     def draw_rect(self, x1: float, y1: float, width: float, height: float, color: str):
         self.draw.rect(self.screen, color, (x1+(self.width // 2), y1 + (self.height // 2), width, height))
 
-    def draw_poly(self, coords: tuple[tuple[float, float]], color: str):
+    def draw_poly(self, coords: Sequence[tuple[float, float]], color: str|pyg.Color):
         coords = direct.change_ref(self.width//2, self.height//2, coords)
         self.draw.polygon(self.screen, color, coords)
 

@@ -1,5 +1,3 @@
-from enum import nonmember
-
 from backwork.Vector2D import Vector2D, math
 from random import randint
 from tkinter import Tk, Canvas

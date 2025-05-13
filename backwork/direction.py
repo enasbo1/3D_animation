@@ -1,3 +1,4 @@
+from collections.abc import Sequence
 from math import *
 
 
@@ -108,7 +109,7 @@ def rotate(v: tuple[float, float]) -> tuple[float, float]:
     return -v[1], v[0]
 
 
-def change_ref(x: float, y: float, coords: tuple[tuple[float, float]]) -> tuple[tuple[float, ...], ...]:
+def change_ref(x: float, y: float, coords: Sequence[tuple[float, float]]) -> tuple[tuple[float, ...], ...]:
     return tuple([tuple([i[0]+x, i[1]+y]) for i in coords])
 
 

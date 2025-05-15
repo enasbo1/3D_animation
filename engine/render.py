@@ -16,13 +16,23 @@ class Face:
         self.color = color
         self.pointIndex = pointIndex;
 
+class Transform:
+    def apply(self, mesh)->tuple[Vector3D]:
+        return mesh.points
+
 class Mesh:
+    transform:Transform
     points:tuple[Vector3D, ...]
     faces:tuple[Face, ...]
 
-    def __init__(self, points:tuple[Vector3D, ...]=None, faces:tuple[Face, ...]=None):
+    def __init__(self, points:tuple[Vector3D, ...]=None, faces:tuple[Face, ...]=None, transform:Transform = Transform()):
         self.points = points if points is not None else []
         self.faces = faces if faces is not None else []
+        self.transform = transform
+
+
+    transformedPoints = property(lambda self:self.transform.apply(self))
+
 
 class Camera(Vector3D):
     d:float = 0.
@@ -37,7 +47,7 @@ class Render:
     def show(self, cam: Camera, pygio : PygIO, vertice:bool = False, edge:bool = False):
         a_points  = []
         for m in self.mesh:
-            points = tuple(per_point(pygio.width, pygio.height, cam, cam.d, cam.v, p) for p in m.points)
+            points = tuple(per_point(pygio.width, pygio.height, cam, cam.d, cam.v, p) for p in m.transformedPoints)
             for f in m.faces:
                 f.camDist = _per_point_dirCam.scalar(
                     somme(*tuple(m.points[i] for i in f.pointIndex)) / len(f.pointIndex)

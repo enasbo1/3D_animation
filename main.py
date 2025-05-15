@@ -1,7 +1,10 @@
 import engine.worker as worker
-import scripts.MainGame as mg
-from scripts.Menu import Menu
+from scripts.QuaternionRotation import ObjectRotationQuaternion
+from scripts.MatrixRotation import ObjectRotationMatrix
+from scripts.UncenteredRotation import ObjectUncenteredRotation
 
+game = worker.Worker(ObjectRotationQuaternion())
+game.start()
 
 def main():
     game = worker.Worker(Menu())

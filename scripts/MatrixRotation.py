@@ -1,8 +1,9 @@
 import pygame
 import math
 from backwork.Vector3D import Vector3D
-from engine.render import Mesh, Face, Camera
+from engine.render import Mesh, Face, Camera, Transform
 from engine.worker import GameMaster, PygIO
+from scripts.Cube import Cube
 
 class MatrixRotation:
     """Classe utilitaire pour les rotations par matrices"""
@@ -48,34 +49,30 @@ class MatrixRotation:
         z = point.x * matrix[2][0] + point.y * matrix[2][1] + point.z * matrix[2][2]
         return Vector3D(x, y, z)
 
-class ObjectRotationMatrix(GameMaster):
-    """Démontre la rotation d'un objet en utilisant des matrices"""
-    
+class ObjectRotationMatrix(GameMaster):    
     def onCreate(self):
-        # Création du cube avec des coordonnées plus éloignées (comme dans MainGame.py)
-        self.original_points = [
-            Vector3D(9, -0.5, -0.5),  
-            Vector3D(9, 0.5, -0.5),   
-            Vector3D(9, 0.5, 0.5),    
-            Vector3D(9, -0.5, 0.5),   
-            Vector3D(10, -0.5, -0.5), 
-            Vector3D(10, 0.5, -0.5),  
-            Vector3D(10, 0.5, 0.5),   
-            Vector3D(10, -0.5, 0.5)   
-        ]
+        camera = self.worker.activeCamera
         
-        # Points actuels pour manipulation
-        self.current_points = self.original_points.copy()
+        cube = Cube()
+        # Convertir les points du cube et les mettre à l'échelle
+        scale = 1  # Taille du cube
+        self.original_points = [Vector3D(p[0] * scale, p[1] * scale, p[2] * scale) for p in cube.points]
+        self.current_points = self.original_points.copy()  # Points après rotation
         
+        # Définition des faces avec des couleurs bien contrastées
         self.faces = [
-            Face(pointIndex=(0, 1, 2, 3), color=pygame.Color(255, 0, 0)),    # rouge
-            Face(pointIndex=(4, 5, 6, 7), color=pygame.Color(0, 255, 0)),    # verte
-            Face(pointIndex=(0, 1, 5, 4), color=pygame.Color(0, 0, 255)),    # bleue
-            Face(pointIndex=(2, 3, 7, 6), color=pygame.Color(255, 255, 0)),  # jaune
-            Face(pointIndex=(0, 3, 7, 4), color=pygame.Color(255, 0, 255)),  # magenta
-            Face(pointIndex=(1, 2, 6, 5), color=pygame.Color(0, 255, 255)),  # cyan
+            Face(pointIndex=(0, 1, 2, 3), color=pygame.Color(255, 0, 0)),      # Rouge
+            Face(pointIndex=(4, 5, 6, 7), color=pygame.Color(0, 255, 0)),      # Vert
+            Face(pointIndex=(0, 1, 5, 4), color=pygame.Color(0, 0, 255)),      # Bleu
+            Face(pointIndex=(2, 3, 7, 6), color=pygame.Color(255, 255, 0)),    # Jaune
+            Face(pointIndex=(0, 3, 7, 4), color=pygame.Color(255, 0, 255)),    # Magenta
+            Face(pointIndex=(1, 2, 6, 5), color=pygame.Color(0, 255, 255)),    # Cyan
         ]
         
+        # Position du cube devant la caméra
+        self.cube_position = Vector3D(10, 0, 0)  # Placer le cube sur l'axe X
+        
+        # Création du mesh directement avec les points et les faces
         self.mesh = Mesh(
             points=tuple(self.current_points),
             faces=tuple(self.faces)
@@ -101,43 +98,56 @@ class ObjectRotationMatrix(GameMaster):
         
         self.operation_count = 0
         
-        center = Vector3D(9.5, 0, 0)
-        
+        # Créer les matrices de rotation
         mat_x = MatrixRotation.rotation_x(self.angle_x)
         mat_y = MatrixRotation.rotation_y(self.angle_y)
         mat_z = MatrixRotation.rotation_z(self.angle_z)
         
-        # Application des rotations à chaque point
-        for i, original in enumerate(self.original_points):
-            # Translater vers l'origine
-            point = Vector3D(original.x - center.x, original.y - center.y, original.z - center.z)
-            
-            # Appliquer les rotations
-            rotated = MatrixRotation.apply_matrix(point, mat_x)
-            self.operation_count += 1
-            
-            rotated = MatrixRotation.apply_matrix(rotated, mat_y)
-            self.operation_count += 1
-            
-            rotated = MatrixRotation.apply_matrix(rotated, mat_z)
-            self.operation_count += 1
-            
-            # Ramener à la position d'origine
-            self.current_points[i] = Vector3D(
-                rotated.x + center.x, 
-                rotated.y + center.y, 
-                rotated.z + center.z
-            )
+        # Combiner les matrices (multiplication matricielle)
+        combined_matrix = [
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 0]
+        ]
         
-        # Mise à jour du mesh
+        # Multipliez d'abord X par Y
+        for i in range(3):
+            for j in range(3):
+                for k in range(3):
+                    combined_matrix[i][j] += mat_x[i][k] * mat_y[k][j]
+                    self.operation_count += 1
+        
+        # Multipliez le résultat par Z
+        final_matrix = [
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 0]
+        ]
+        
+        for i in range(3):
+            for j in range(3):
+                for k in range(3):
+                    final_matrix[i][j] += combined_matrix[i][k] * mat_z[k][j]
+                    self.operation_count += 1
+        
+        # Appliquer la matrice de rotation à tous les points
+        for i, original in enumerate(self.original_points):
+            # Appliquer la rotation par matrice
+            rotated = MatrixRotation.apply_matrix(original, final_matrix)
+            self.operation_count += 1
+            
+            # Déplacer à la position finale
+            self.current_points[i] = rotated + self.cube_position
+        
+        # Mettre à jour le mesh avec les points tournés
         self.mesh.points = tuple(self.current_points)
 
     def show_over(self, pygIO: PygIO):
         # Affichage d'informations
-        pygIO.draw_text(1, 1, 
+        pygIO.draw_text(-500, 0, 
                        f"Rotation Matrice: X={self.angle_x:.2f}, Y={self.angle_y:.2f}, Z={self.angle_z:.2f}", 
                        20, pygame.Color(255, 255, 255))
-        pygIO.draw_text(10, 40, 
+        pygIO.draw_text(-580, 30, 
                        f"Opérations: {self.operation_count}", 
                        20, pygame.Color(255, 255, 255))
 

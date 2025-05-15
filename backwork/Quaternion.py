@@ -132,3 +132,25 @@ class Quaternion:
             k = 0.25 * s
 
         return Quaternion(r, i, j, k)
+    
+    @staticmethod
+    def rotation(axis: Vector3D, angle: float):
+        # Normalize axis
+        axis_norm = axis.norm
+        if axis_norm > 0:
+            axis = axis / axis_norm
+        else:
+            return Quaternion(1, 0, 0, 0)  # Identity quaternion
+        
+        half_angle = angle / 2
+        cos_a = math.cos(half_angle)
+        sin_a = math.sin(half_angle)
+        
+        return Quaternion(cos_a, sin_a * axis.x, sin_a * axis.y, sin_a * axis.z)
+    
+    def rotate_point(self, point: Vector3D) -> Vector3D:
+        p = Quaternion(0, point.x, point.y, point.z)
+        q_conj = self.conj()
+        rotated = self * p * q_conj
+        
+        return Vector3D(rotated.i, rotated.j, rotated.k)

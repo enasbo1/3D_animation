@@ -1,8 +1,7 @@
 import engine.worker as worker
-import scripts.MainGame as mg
-import backwork.affichage
+from scripts.QuaternionRotation import ObjectRotationQuaternion
 
-game = worker.Worker(mg.MainGame())
+game = worker.Worker(ObjectRotationQuaternion())
 game.start()
 
 while game.pygIO.running:

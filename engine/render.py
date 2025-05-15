@@ -34,7 +34,8 @@ class Render:
     def __init__(self, mesh : list[Mesh] = None):
         self.mesh = mesh if mesh is not None else []
 
-    def showFaces(self, cam: Camera, pygio : PygIO):
+    def show(self, cam: Camera, pygio : PygIO, vertice:bool = False, edge:bool = False):
+        a_points  = []
         for m in self.mesh:
             points = tuple(per_point(pygio.width, pygio.height, cam, cam.d, cam.v, p) for p in m.points)
             for f in m.faces:
@@ -42,19 +43,26 @@ class Render:
                     somme(*tuple(m.points[i] for i in f.pointIndex)) / len(f.pointIndex)
                 )
                 f.pointPers = tuple(points[i] for i in f.pointIndex)
+            a_points.extend(points)
 
         if len(self.mesh)==0: return;
 
         if len(self.mesh)==1:
-            faces:list[Face] = list(self.mesh[0].faces)
+            _faces:list[Face] = list(self.mesh[0].faces)
         else:
-            faces:list[Face] = list(concat(*[m.faces for m in self.mesh]))
+            _faces:list[Face] = list(concat(*[m.faces for m in self.mesh]))
 
-        faces.sort(key = lambda x:x.camDist, reverse=True)
+        _faces.sort(key = lambda x:x.camDist, reverse=True)
 
-        for f in faces:
+        for f in _faces:
             if f.camDist>0:
                 pygio.draw_poly(tuple(p.coord for p in f.pointPers), f.color)
-
+        if edge:
+            for f in _faces:
+                if f.camDist>0:
+                    pygio.draw_poly(tuple(p.coord for p in f.pointPers), "#333333", width = 2)
+        if vertice:
+            for p in a_points:
+                pygio.draw_cross(p.coord, 7, "#aa0000")
 
 

@@ -30,7 +30,7 @@ class MainGame(GameMaster):
         pass
 
     def update(self):
-        origin = Vector2D(10,0)
+        origin = Vector2D(9.5,0)
         for i in self.testMesh.points:
             a, n = (i.project_h()-origin).exponential
             a += self.worker.deltaTime

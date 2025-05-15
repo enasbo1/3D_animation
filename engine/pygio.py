@@ -53,11 +53,12 @@ class PygIO:
     def draw_rect(self, x1: float, y1: float, width: float, height: float, color: str):
         self.draw.rect(self.screen, color, (x1+(self.width // 2), y1 + (self.height // 2), width, height))
 
-    def draw_poly(self, coords: Sequence[tuple[float, float]], color: str|pyg.Color):
+    def draw_poly(self, coords: Sequence[tuple[float, float]], color: str|pyg.Color, width:int = 0):
         coords = direct.change_ref(self.width//2, self.height//2, coords)
-        self.draw.polygon(self.screen, color, coords)
+        self.draw.polygon(self.screen, color, coords, width)
 
     def draw_cross(self, center: tuple[float, float], size: float, color):
+        center = direct.sum_vectors((self.width//2, self.height//2), center)
         self.draw.line(self.screen, color, direct.sum_vectors(center, (-size,-size)), direct.sum_vectors(center, (size,size)), width=2)
         self.draw.line(self.screen, color, direct.sum_vectors(center, (-size,size)), direct.sum_vectors(center, (size,-size)), width=2)
 

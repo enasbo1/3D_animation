@@ -42,7 +42,7 @@ class Worker:
         for i in self.activeMBList:
             i.show(self.pygIO)
 
-        self.renderer.showFaces(self.activeCamera, self.pygIO)
+        self.renderer.show(self.activeCamera, self.pygIO, edge = True, vertice = True)
 
         self.show_over(self.pygIO)
 

@@ -7,20 +7,20 @@ from backwork.mathAddOn import somme
 from engine.pygio import PygIO, pyg
 
 class Face:
-    pointIndex:tuple[int]
+    pointIndex:tuple[int, int, int]
     color:pyg.Color
     camDist:float
     pointPers:tuple[Vector2D,]
 
-    def __init__(self, pointIndex:tuple[int,] = tuple(), color:pyg.Color = pyg.Color(150,150,150)):
+    def __init__(self, pointIndex:tuple[int, int, int] = tuple(), color:pyg.Color = pyg.Color(150,150,150)):
         self.color = color
         self.pointIndex = pointIndex;
 
 class Mesh:
-    points:tuple[Vector3D,]
-    faces:tuple[Face,]
+    points:tuple[Vector3D, ...]
+    faces:tuple[Face, ...]
 
-    def __init__(self, points:tuple[Vector3D,]=None, faces:tuple[Face,]=None):
+    def __init__(self, points:tuple[Vector3D, ...]=None, faces:tuple[Face, ...]=None):
         self.points = points if points is not None else []
         self.faces = faces if faces is not None else []
 

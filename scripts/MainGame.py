@@ -3,26 +3,29 @@ import pygame as pyg
 from backwork.Vector3D import Vector3D
 from engine.render import Mesh
 from engine.worker import GameMaster, PygIO
-from meshs.Mesh import Transform
 from scripts.Menu import Menu
 from scripts.DisplayTest import DisplayTest
 from scripts.MatrixRotation import ObjectRotationMatrix
 from scripts.QuaternionRotation import ObjectRotationQuaternion
 from scripts.Transform3D import Transform3D
-from scripts.UncenteredRotation import ObjectUncenteredRotation
 from meshs.Cube import Cube
+from meshs.Pyramid import Pyramid
 
 
 class MainGame(GameMaster):
     menu: Menu
+    treatment: DisplayTest | ObjectRotationMatrix | ObjectRotationQuaternion = None
+
     mesh: Mesh = None
-    treatment: DisplayTest | ObjectRotationMatrix | ObjectRotationQuaternion | ObjectUncenteredRotation = None
+    transform: Transform3D
+
     test: DisplayTest
     matrixRotate: ObjectRotationMatrix
     quaternionRotate: ObjectRotationQuaternion
-    # uncenteredRotate: ObjectUncenteredRotation
-    cube:Mesh
-    transform:Transform3D
+
+    cube: Mesh
+    pyramid: Mesh
+
     keyPressed: int = 0
 
     def onCreate(self):
@@ -32,9 +35,9 @@ class MainGame(GameMaster):
         self.test = DisplayTest(self.worker)
         self.matrixRotate = ObjectRotationMatrix(self.worker, self.transform)
         self.quaternionRotate = ObjectRotationQuaternion(self.worker, self.transform)
-        self.transform.position = Vector3D(10,0,0)
+        self.transform.position = Vector3D(10, 0, 0)
         self.cube = Cube(transform=self.transform)
-        # self.uncenteredRotate = ObjectUncenteredRotation(self.worker)
+        self.pyramid = Pyramid(transform=self.transform)
 
     def start(self):
         pass
@@ -87,9 +90,9 @@ class MainGame(GameMaster):
                 self.changeMenu(2)
 
         elif self.menu.menuToDisplay == 1:
-            # if self.worker.keysInput[pyg.K_0]:
-            #     self.keyPressed = pyg.K_0
-            #     self.changeMesh(Pyramid().mesh)
+            if self.worker.keysInput[pyg.K_0]:
+                self.keyPressed = pyg.K_0
+                self.changeMesh(self.pyramid)
             if self.worker.keysInput[pyg.K_1]:
                 self.keyPressed = pyg.K_1
                 self.changeMesh(self.cube)
@@ -110,9 +113,6 @@ class MainGame(GameMaster):
             if self.worker.keysInput[pyg.K_3]:
                 self.keyPressed = pyg.K_3
                 self.changeTreatment(self.quaternionRotate)
-            # if self.worker.keysInput[pyg.K_4]:
-            #     self.keyPressed = pyg.K_4
-            #     self.changeTreatment(self.uncenteredRotate)
             if self.worker.keysInput[pyg.K_9]:
                 self.keyPressed = pyg.K_9
                 self.changeMenu(0)

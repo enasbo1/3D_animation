@@ -23,12 +23,12 @@ class QuaternionRotation:
 
 class ObjectRotationQuaternion:
     mesh: Mesh
-    transform : Transform3D
+    transform: Transform3D
     rotation_speed: float
-    operation_count: float
-    axe:Vector3D = Vector3D(6,3,2)
+    operation_count: int
+    axe: Vector3D = Vector3D(6, 3, 2)
 
-    def __init__(self,worker:Worker, transform:Transform3D):
+    def __init__(self, worker: Worker, transform: Transform3D):
         self.transform = transform
         self.worker = worker
 
@@ -37,13 +37,13 @@ class ObjectRotationQuaternion:
         self.operation_count = 0
 
     def update(self):
-        mesh = self.mesh
+        self.operation_count = 0
 
         # Update Rotation angle
         self.transform.rotation = self.transform.rotation * Quaternion.rotation(self.axe, self.worker.deltaTime)
+        self.operation_count += 7
 
     def show_over(self, pygIO: PygIO):
-        mesh = self.mesh
         pygIO.draw_text(-500, 0,
                         f"Rotation Quaternion: {self.transform.rotation}",
                         20, pygame.Color(255, 255, 255))

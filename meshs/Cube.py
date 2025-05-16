@@ -5,7 +5,7 @@ from meshs.Mesh import Mesh, Face, Transform
 
 
 class Cube(Mesh):
-    def __init__(self, transform:Transform = Transform()):
+    def __init__(self, transform: Transform = Transform()):
         super().__init__(
             points=[
                 Vector3D(-1, -1, -1),
@@ -25,5 +25,5 @@ class Cube(Mesh):
                 Face(pointIndex=(0, 3, 7, 4), color=pygame.Color(255, 0, 255)),    # Magenta
                 Face(pointIndex=(1, 2, 6, 5), color=pygame.Color(0, 255, 255)),    # Cyan
             ),
-            transform = transform
+            transform=transform
         )

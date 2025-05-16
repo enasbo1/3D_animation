@@ -1,4 +1,5 @@
 import math
+
 from backwork.Vector3D import Vector3D
 
 
@@ -16,7 +17,7 @@ class Quaternion:
 
     @staticmethod
     def identity():
-        return Quaternion(1,0,0,0)
+        return Quaternion(1, 0, 0, 0)
 
     def __str__(self):
         return f"({self.r}, {self.i}, {self.j}, {self.k})"
@@ -82,7 +83,7 @@ class Quaternion:
             [k, -j, i, r]
         ]
 
-    def toV3Matrix(self) -> list[list[float,float,float], list[float,float,float], list[float,float,float]]:
+    def toV3Matrix(self) -> list[list[float]]:
         r, i, j, k = self.r, self.i, self.j, self.k
         return [
             [

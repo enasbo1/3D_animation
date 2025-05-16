@@ -1,5 +1,3 @@
-from multiprocessing.pool import worker
-
 import pygame
 import math
 
@@ -46,14 +44,6 @@ class MatrixRotation:
             [0, 0, 1]
         ]
 
-    @staticmethod
-    def apply_matrix(point, matrix):
-        """Applique une matrice 3x3 à un point Vector3D"""
-        x = point.x * matrix[0][0] + point.y * matrix[0][1] + point.z * matrix[0][2]
-        y = point.x * matrix[1][0] + point.y * matrix[1][1] + point.z * matrix[1][2]
-        z = point.x * matrix[2][0] + point.y * matrix[2][1] + point.z * matrix[2][2]
-        return Vector3D(x, y, z)
-
 
 class ObjectRotationMatrix:
     mesh: Mesh
@@ -70,17 +60,17 @@ class ObjectRotationMatrix:
         self.operation_count = 0
 
     def update(self):
+        self.operation_count = 0
 
         # update rotation angles
         origin_matrix = self.transform.rotation.toV3Matrix()
-
-
-        self.operation_count = 0
+        self.operation_count += 9
 
         # Create les matrices de rotation
         mat_x = MatrixRotation.rotation_x(self.worker.deltaTime)
         mat_y = MatrixRotation.rotation_y(self.worker.deltaTime/2)
         mat_z = MatrixRotation.rotation_z(self.worker.deltaTime/3)
+        self.operation_count += 6
 
         # Combiner les matrices (multiplication matricielle)
         combined_matrix = [
@@ -108,6 +98,7 @@ class ObjectRotationMatrix:
                 for k in range(3):
                     final_matrix[i][j] += combined_matrix[i][k] * mat_z[k][j]
                     self.operation_count += 1
+
         # Multipliez le résultat par Z
         sum_matrix = [
             [0, 0, 0],
@@ -124,7 +115,9 @@ class ObjectRotationMatrix:
         self.transform.rotation = Quaternion.fromV3Matrix(sum_matrix)
 
     def show_over(self, pygIO: PygIO):
-        mesh = self.mesh
+        pygIO.draw_text(-500, 0,
+                        f"Rotation Quaternion: {self.transform.rotation}",
+                        20, pygame.Color(255, 255, 255))
         pygIO.draw_text(-580, 30,
                         f"Opérations: {self.operation_count}",
                         20, pygame.Color(255, 255, 255))

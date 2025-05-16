@@ -1,11 +1,10 @@
 import pygame
-import math
+
 from backwork.Vector3D import Vector3D
 from backwork.Quaternion import Quaternion
-from engine.render import Mesh, Face, Camera
-from engine.worker import GameMaster, PygIO
+from meshs.Mesh import Mesh, Face
+from engine.worker import PygIO
 from scripts.Transform3D import Transform3D
-from scripts.Cube import Cube
 
 class UncenteredRotation:
     """Classe utilitaire pour les rotations décentrées (autour d'un point autre que l'origine)"""
@@ -15,26 +14,24 @@ class UncenteredRotation:
         """Crée un quaternion pour une rotation autour d'un axe"""
         return Quaternion.rotation(axis, angle)
 
-class ObjectUncenteredRotation(GameMaster):
-    """Démontre la rotation d'un objet autour d'un centre arbitraire"""
+
+class ObjectUncenteredRotation:
+    mesh: Mesh
+    original_points: list[Vector3D]
+    current_points: list[Vector3D]
+    cube_position: Vector3D
+    angle_x: float
+    angle_y: float
+    angle_z: float
+    rotation_speed: float
+    operation_count: float
     
-    def onCreate(self):
-        camera = self.worker.activeCamera
-        cube = Cube()
-        
+    def init(self, mesh):
+        self.mesh = mesh
+
         # Convertir les points du cube et les mettre à l'échelle
         scale = 1  # Taille du cube
-        self.original_points = [Vector3D(p[0], p[1], p[2]) for p in cube.points]
-        
-        # Définition des faces avec des couleurs bien contrastées
-        self.faces = [
-            Face(pointIndex=(0, 1, 2, 3), color=pygame.Color(255, 0, 0)),      # Rouge
-            Face(pointIndex=(4, 5, 6, 7), color=pygame.Color(0, 255, 0)),      # Vert
-            Face(pointIndex=(0, 1, 5, 4), color=pygame.Color(0, 0, 255)),      # Bleu
-            Face(pointIndex=(2, 3, 7, 6), color=pygame.Color(255, 255, 0)),    # Jaune
-            Face(pointIndex=(0, 3, 7, 4), color=pygame.Color(255, 0, 255)),    # Magenta
-            Face(pointIndex=(1, 2, 6, 5), color=pygame.Color(0, 255, 255)),    # Cyan
-        ]
+        self.original_points = [Vector3D(p.x, p.y, p.z) for p in cube.points]
         
         # Position du cube devant la caméra
         self.cube_position = Vector3D(10, 0, 0)  # Position globale du cube
@@ -48,19 +45,9 @@ class ObjectUncenteredRotation(GameMaster):
         
         # Création du Transform3D avec position et échelle
         self.transform = Transform3D(
-            position=self.cube_position,
-            scale=Vector3D(scale, scale, scale)
+            # position=self.cube_position,
+            # scale=Vector3D(scale, scale, scale)
         )
-        
-        # Création du mesh avec le Transform3D
-        self.mesh = Mesh(
-            points=tuple(self.original_points),
-            faces=tuple(self.faces),
-            transform=self.transform
-        )
-        
-        # Ajout au renderer
-        self.worker.renderer.mesh.append(self.mesh)
         
         # Ajout d'un petit indicateur pour le centre de rotation
         center_marker_points = []
@@ -72,7 +59,7 @@ class ObjectUncenteredRotation(GameMaster):
         
         # Transformation pour le marqueur
         self.marker_transform = Transform3D(
-            position=self.global_rotation_center
+            # position=self.global_rotation_center
         )
         
         self.marker_mesh = Mesh(
@@ -87,7 +74,6 @@ class ObjectUncenteredRotation(GameMaster):
             ),
             transform=self.marker_transform
         )
-        self.worker.renderer.mesh.append(self.marker_mesh)
         
         # Angles de rotation
         self.angle_x = 0
@@ -99,9 +85,6 @@ class ObjectUncenteredRotation(GameMaster):
         
         # Compteur d'opérations pour comparaison
         self.operation_count = 0
-        
-        # Affichage d'informations
-        self.worker.show_over = self.show_over
 
     def start(self):
         pass

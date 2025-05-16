@@ -62,10 +62,14 @@ class PygIO:
         self.draw.line(self.screen, color, direct.sum_vectors(center, (-size,-size)), direct.sum_vectors(center, (size,size)), width=2)
         self.draw.line(self.screen, color, direct.sum_vectors(center, (-size,size)), direct.sum_vectors(center, (size,-size)), width=2)
 
-    def draw_text(self, x, y, text: str, size: int, color='#000000'):
+    def draw_text(self, x, y, text: str, size: int, color='#000000', center=True):
         my_font = pyg.font.SysFont('Aptos', size)
         text_surface = my_font.render(text, False, color)
 
         # topleft, center, bottomright. Add them in param if needed
-        text_rect = text_surface.get_rect(topleft=(x + (self.width // 2), y + (self.height // 2)))
+        if center:
+            text_rect = text_surface.get_rect(center=(x + (self.width // 2), y + (self.height // 2)))
+        else:
+            text_rect = text_surface.get_rect(topleft=(x + (self.width // 2), y + (self.height // 2)))
+
         self.screen.blit(text_surface, text_rect)

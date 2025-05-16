@@ -17,9 +17,9 @@ class Worker:
         self._physTimeMark = 0
         self.extrapolatePhysicsDelta = 0
         self.physStepDuration = 0.03
-        self.keysInput: pyg.ScancodeWrapper = None
+        self.keysInput: pyg.ScancodeWrapper = self.pygIO.getKeys()
         self.show_over = lambda piGio: None
-        self.renderer:Render = Render()
+        self.renderer: Render = Render()
         self.activeCamera = Camera(0,0,0)
         game.onCreate()
 

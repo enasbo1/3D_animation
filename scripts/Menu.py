@@ -1,35 +1,39 @@
-import pygame
-
-from backwork.Vector2D import Vector2D
-from backwork.Vector3D import Vector3D
-from engine.render import Mesh, Face
-from engine.worker import GameMaster, PygIO
+from engine.worker import PygIO
 
 
-class Menu(GameMaster):
-    testMesh: Mesh
+class Menu:
+    menuToDisplay: int = 0
 
-    def onCreate(self):
-        pass
+    @staticmethod
+    def selectMode(pygIO: PygIO):
+        boxPosX = -pygIO.width // 2
+        boxPosY = 200
+        pygIO.draw_rect(boxPosX, boxPosY + 20, 500, 2000, "#000000")
+        pygIO.draw_text(boxPosX + 20, boxPosY + 60, "Main Menu:", 30, "#FFFFFF", False)
+        pygIO.draw_text(boxPosX + 20, boxPosY + 100, "0: Select Mesh and Reset", 30, "#FFFFFF", False)
+        pygIO.draw_text(boxPosX + 20, boxPosY + 140, "1: Select Treatment", 30, "#FFFFFF", False)
 
-    def start(self):
-        pass
-
-    def update(self):
-        pass
-
-    def show(self, pygIO: PygIO):
-        boxPos = -pygIO.width // 2
-        pygIO.draw_rect(boxPos, 20, 500, 2000, "#000000")
-        pygIO.draw_text(boxPos, 60, "Exemple to display:", 30, "#FFFFFF")
-        pygIO.draw_text(boxPos, 100, "0: Display Test", 30, "#FFFFFF")
-        pygIO.draw_text(boxPos, 140, "1: Point rotation", 30, "#FFFFFF")
-        pygIO.draw_text(boxPos, 180, "2: Matrice rotation", 30, "#FFFFFF")
-        pygIO.draw_text(boxPos, 220, "3: Quaternion rotation", 30, "#FFFFFF")
-        pygIO.draw_text(boxPos, 260, "4: Not Centered Rotation", 30, "#FFFFFF")
+    @staticmethod
+    def selectMesh(pygIO: PygIO):
+        boxPosX = -pygIO.width // 2
+        boxPosY = 200
+        pygIO.draw_rect(boxPosX, boxPosY + 20, 500, 2000, "#000000")
+        pygIO.draw_text(boxPosX + 20, boxPosY + 60, "Mesh to display:", 30, "#FFFFFF", False)
+        pygIO.draw_text(boxPosX + 20, boxPosY + 100, "0: Pyramid", 30, "#FFFFFF", False)
+        pygIO.draw_text(boxPosX + 20, boxPosY + 140, "1: Cube", 30, "#FFFFFF", False)
+        pygIO.draw_text(boxPosX + 20, boxPosY + 180, "9: Return", 30, "#FFFFFF", False)
 
 
-        pass
-
-    def fixedUpdate(self):
+    @staticmethod
+    def selectTreatment(pygIO: PygIO):
+        boxPosX = -pygIO.width // 2
+        boxPosY = 200
+        pygIO.draw_rect(boxPosX, boxPosY + 20, 500, 2000, "#000000")
+        pygIO.draw_text(boxPosX + 20, boxPosY + 60, "Treatment to display:", 30, "#FFFFFF", False)
+        pygIO.draw_text(boxPosX + 20, boxPosY + 100, "0: None", 30, "#FFFFFF", False)
+        pygIO.draw_text(boxPosX + 20, boxPosY + 140, "1: Test treatment", 30, "#FFFFFF", False)
+        pygIO.draw_text(boxPosX + 20, boxPosY + 180, "2: Matrice rotation", 30, "#FFFFFF", False)
+        pygIO.draw_text(boxPosX + 20, boxPosY + 220, "3: Quaternion rotation", 30, "#FFFFFF", False)
+        pygIO.draw_text(boxPosX + 20, boxPosY + 260, "4: Not Centered Rotation", 30, "#FFFFFF", False)
+        pygIO.draw_text(boxPosX + 20, boxPosY + 300, "9: Return", 30, "#FFFFFF", False)
         pass

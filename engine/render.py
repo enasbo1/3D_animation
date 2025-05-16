@@ -11,6 +11,11 @@ class Camera(Vector3D):
     d:float = 0.
     v:float = 0.
 
+    def __init__(self, x:float, y:float, z:float, d = 0., v = 0.):
+        super().__init__(x, y, z)
+        self.v = v
+        self.d = d
+
 class Render:
     mesh: list[Mesh]
 
@@ -20,10 +25,13 @@ class Render:
     def show(self, cam: Camera, pygio : PygIO, vertice:bool = False, edge:bool = False):
         a_points = []
         for m in self.mesh:
-            points = tuple(per_point(pygio.width, pygio.height, cam, cam.d, cam.v, p) for p in m.transformedPoints)
+            tr_points = m.transformedPoints
+            points = tuple(per_point(pygio.width, pygio.height, cam, cam.d, cam.v, p) for p in tr_points)
+            for i,j in enumerate(points):
+                j.f = _per_point_dirCam.scalar(tr_points[i])
             for f in m.faces:
                 f.camDist = _per_point_dirCam.scalar(
-                    somme(*tuple(m.points[i] for i in f.pointIndex)) / len(f.pointIndex)
+                    somme(*tuple(tr_points[i] for i in f.pointIndex)) / len(f.pointIndex)
                 )
                 f.pointPers = tuple(points[i] for i in f.pointIndex)
             a_points.extend(points)
@@ -46,6 +54,7 @@ class Render:
                     pygio.draw_poly(tuple(p.coord for p in f.pointPers), "#333333", width = 2)
         if vertice:
             for p in a_points:
-                pygio.draw_cross(p.coord, 7, "#aa0000")
+                if p.f>0:
+                    pygio.draw_cross(p.coord, 7, "#aa0000")
 
 

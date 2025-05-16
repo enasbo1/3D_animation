@@ -8,10 +8,15 @@ class Transform3D(Transform):
     position : Vector3D
     scale : Vector3D
 
+    def __init__(self):
+        self.position = Vector3D.zero()
+        self.rotation = Quaternion.identity()
+        self.scale = Vector3D.one()
+
 
     def apply(self, mesh:Mesh) -> tuple[Vector3D]:
 
         # application de la position
-        points : list[Vector3D] = [i+self.position for i in mesh]
+        points : list[Vector3D] = [self.rotation.rotate_point(i)+self.position for i in mesh.points]
         return tuple(points)
 

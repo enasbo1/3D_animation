@@ -23,5 +23,4 @@ class Pyramid(Mesh):
                 Face(pointIndex=(2, 3, 0), color=pygame.Color(0, 0, 255)),
                 Face(pointIndex=(0, 1, 3), color=pygame.Color(0, 0, 0)),
             ),
-            position=Vector3D(10, 0, 0)
         )

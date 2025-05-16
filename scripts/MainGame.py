@@ -3,12 +3,13 @@ import pygame as pyg
 from backwork.Vector3D import Vector3D
 from engine.render import Mesh
 from engine.worker import GameMaster, PygIO
+from meshs.Mesh import Transform
 from scripts.Menu import Menu
 from scripts.DisplayTest import DisplayTest
 from scripts.MatrixRotation import ObjectRotationMatrix
 from scripts.QuaternionRotation import ObjectRotationQuaternion
+from scripts.Transform3D import Transform3D
 from scripts.UncenteredRotation import ObjectUncenteredRotation
-from meshs.Pyramid import Pyramid
 from meshs.Cube import Cube
 
 
@@ -20,15 +21,19 @@ class MainGame(GameMaster):
     matrixRotate: ObjectRotationMatrix
     quaternionRotate: ObjectRotationQuaternion
     # uncenteredRotate: ObjectUncenteredRotation
-
+    cube:Mesh
+    transform:Transform3D
     keyPressed: int = 0
 
     def onCreate(self):
+        self.transform = Transform3D()
         self.menu = Menu()
         self.worker.show_over = self.show_over
         self.test = DisplayTest(self.worker)
-        self.matrixRotate = ObjectRotationMatrix()
-        self.quaternionRotate = ObjectRotationQuaternion()
+        self.matrixRotate = ObjectRotationMatrix(self.worker, self.transform)
+        self.quaternionRotate = ObjectRotationQuaternion(self.worker, self.transform)
+        self.transform.position = Vector3D(10,0,0)
+        self.cube = Cube(transform=self.transform)
         # self.uncenteredRotate = ObjectUncenteredRotation(self.worker)
 
     def start(self):
@@ -36,25 +41,18 @@ class MainGame(GameMaster):
 
     def update(self):
         self.menuInputs()
-        if self.treatment is not None:
-            self.treatment.update()
-
         if self.mesh is not None:
             if self.worker.keysInput[pyg.K_LEFT]:
-                newPos = self.mesh.position + Vector3D(0, 1, 0)
-                self.mesh.position = newPos
+                self.transform.position += Vector3D(0, 1, 0) * self.worker.deltaTime
 
             if self.worker.keysInput[pyg.K_RIGHT]:
-                newPos = self.mesh.position + Vector3D(0, -1, 0)
-                self.mesh.position = newPos
+                self.transform.position += Vector3D(0, -1, 0) * self.worker.deltaTime
 
             if self.worker.keysInput[pyg.K_UP]:
-                newPos = self.mesh.position + Vector3D(1, 0, 0)
-                self.mesh.position = newPos
+                self.transform.position += Vector3D(1, 0, 0) * self.worker.deltaTime
 
             if self.worker.keysInput[pyg.K_DOWN]:
-                newPos = self.mesh.position + Vector3D(-1, 0, 0)
-                self.mesh.position = newPos
+                self.transform.position += Vector3D(-1, 0, 0) * self.worker.deltaTime
         pass
 
     def show_over(self, pygIO: PygIO):
@@ -71,7 +69,8 @@ class MainGame(GameMaster):
         pass
 
     def fixedUpdate(self):
-        pass
+        if self.treatment is not None:
+            self.treatment.update()
 
     def menuInputs(self):
         if self.keyPressed != -1:
@@ -93,7 +92,7 @@ class MainGame(GameMaster):
             #     self.changeMesh(Pyramid().mesh)
             if self.worker.keysInput[pyg.K_1]:
                 self.keyPressed = pyg.K_1
-                self.changeMesh(Cube().mesh)
+                self.changeMesh(self.cube)
             if self.worker.keysInput[pyg.K_9]:
                 self.keyPressed = pyg.K_9
                 self.changeMenu(0)
@@ -124,6 +123,7 @@ class MainGame(GameMaster):
     def changeMesh(self, mesh):
         self.worker.renderer.mesh.clear()
         self.mesh = mesh
+        mesh.__init__(transform=self.transform)
         self.worker.renderer.mesh.append(mesh)
 
     def changeTreatment(self, treatment):

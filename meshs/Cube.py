@@ -1,16 +1,12 @@
 import pygame
 
 from backwork.Vector3D import Vector3D
-from meshs.Mesh import Mesh, Face
+from meshs.Mesh import Mesh, Face, Transform
 
 
 class Cube(Mesh):
-    mesh: Mesh
-
-    def __init__(self):
-        super().__init__()
-
-        self.mesh = Mesh(
+    def __init__(self, transform:Transform = Transform()):
+        super().__init__(
             points=[
                 Vector3D(-1, -1, -1),
                 Vector3D(1, -1, -1),
@@ -29,5 +25,5 @@ class Cube(Mesh):
                 Face(pointIndex=(0, 3, 7, 4), color=pygame.Color(255, 0, 255)),    # Magenta
                 Face(pointIndex=(1, 2, 6, 5), color=pygame.Color(0, 255, 255)),    # Cyan
             ),
-            position=Vector3D(10, 0, 0)
+            transform = transform
         )

@@ -20,7 +20,7 @@ class Worker:
         self.keysInput: pyg.ScancodeWrapper = self.pygIO.getKeys()
         self.show_over = lambda piGio: None
         self.renderer: Render = Render()
-        self.activeCamera = Camera(0,0,0)
+        self.activeCamera = Camera(0,0,-1.5, v=.2)
         game.onCreate()
 
     def start(self):

@@ -1,9 +1,13 @@
+from multiprocessing.pool import worker
+
 import pygame
 import math
 
+from backwork.Quaternion import Quaternion
 from backwork.Vector3D import Vector3D
-from engine.worker import PygIO
+from engine.worker import PygIO, Worker
 from meshs.Mesh import Mesh
+from scripts.Transform3D import Transform3D
 
 
 class MatrixRotation:
@@ -56,26 +60,27 @@ class ObjectRotationMatrix:
     rotation_speed: float
     operation_count: float
 
+    def __init__(self, worker:Worker, transform:Transform3D):
+        self.transform = transform
+        self.worker = worker
+
     def init(self, mesh):
         self.mesh = mesh
 
-        self.rotation_speed = 0.005
         self.operation_count = 0
 
     def update(self):
-        mesh = self.mesh
 
         # update rotation angles
-        mesh.rotation.x += self.rotation_speed
-        mesh.rotation.y += self.rotation_speed / 2
-        mesh.rotation.z += self.rotation_speed / 3
+        origin_matrix = self.transform.rotation.toV3Matrix()
+
 
         self.operation_count = 0
 
         # Create les matrices de rotation
-        mat_x = MatrixRotation.rotation_x(mesh.rotation.x)
-        mat_y = MatrixRotation.rotation_y(mesh.rotation.y)
-        mat_z = MatrixRotation.rotation_z(mesh.rotation.z)
+        mat_x = MatrixRotation.rotation_x(self.worker.deltaTime)
+        mat_y = MatrixRotation.rotation_y(self.worker.deltaTime/2)
+        mat_z = MatrixRotation.rotation_z(self.worker.deltaTime/3)
 
         # Combiner les matrices (multiplication matricielle)
         combined_matrix = [
@@ -103,23 +108,23 @@ class ObjectRotationMatrix:
                 for k in range(3):
                     final_matrix[i][j] += combined_matrix[i][k] * mat_z[k][j]
                     self.operation_count += 1
+        # Multipliez le résultat par Z
+        sum_matrix = [
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 0]
+        ]
 
-        # Appliquer la matrice de rotation à tous les points
-        for i, original in enumerate(mesh.pointsOrigin):
-            # Appliquer la rotation par matrice
-            rotated = MatrixRotation.apply_matrix(original, final_matrix)
-            self.operation_count += 1
+        for i in range(3):
+            for j in range(3):
+                for k in range(3):
+                    sum_matrix[i][j] += final_matrix[i][k] * origin_matrix[k][j]
+                    self.operation_count += 1
 
-            # Move to final pos
-            mesh.points[i] = rotated + mesh.position
+        self.transform.rotation = Quaternion.fromV3Matrix(sum_matrix)
 
     def show_over(self, pygIO: PygIO):
         mesh = self.mesh
-        print(mesh.points[0].x, mesh.points[0].y, mesh.points[0].z)
-        print(mesh.pointsOrigin[0].x, mesh.pointsOrigin[0].y, mesh.pointsOrigin[0].z)
-        pygIO.draw_text(-500, 0,
-                        f"Rotation Matrice: X={mesh.rotation.x:.2f}, Y={mesh.rotation.y:.2f}, Z={mesh.rotation.z:.2f}",
-                        20, pygame.Color(255, 255, 255))
         pygIO.draw_text(-580, 30,
                         f"Opérations: {self.operation_count}",
                         20, pygame.Color(255, 255, 255))

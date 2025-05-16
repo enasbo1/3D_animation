@@ -12,10 +12,13 @@ class Vector3D(IVector3D):
     def __init__(self, x:float, y:float, z:float):
         self.__coord:tuple[float, float, float] = (x, y, z)
 
-
     @staticmethod
     def zero():
         return Vector3D(0, 0, 0)
+
+    @staticmethod
+    def one():
+        return Vector3D(1, 1, 1)
 
     @staticmethod
     def from_polar(d:float, v:float, norm:float = 1.):

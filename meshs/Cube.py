@@ -11,7 +11,7 @@ class Cube(Mesh):
         super().__init__()
 
         self.mesh = Mesh(
-            points=(
+            points=[
                 Vector3D(-1, -1, -1),
                 Vector3D(1, -1, -1),
                 Vector3D(1, 1, -1),
@@ -20,7 +20,7 @@ class Cube(Mesh):
                 Vector3D(1, -1, 1),
                 Vector3D(1,  1, 1),
                 Vector3D(-1, 1, 1)
-            ),
+            ],
             faces=(
                 Face(pointIndex=(0, 1, 2, 3), color=pygame.Color(255, 0, 0)),      # Rouge
                 Face(pointIndex=(4, 5, 6, 7), color=pygame.Color(0, 255, 0)),      # Vert

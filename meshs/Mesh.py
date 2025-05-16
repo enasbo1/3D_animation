@@ -23,23 +23,28 @@ class Transform:
 
 class Mesh:
     transform: Transform
-    points: tuple[Vector3D, ...]
-    pointsOrigin: tuple[Vector3D, ...]
+    points: list[Vector3D]
+    pointsOrigin: list[Vector3D]
     faces: tuple[Face, ...]
     position: Vector3D
+    rotation: Vector3D
+    scale: Vector3D
 
     transformedPoints = property(lambda self: self.transform.apply(self))
 
     def __init__(self,
-                 points: tuple[Vector3D, ...] = None,
+                 points: list[Vector3D] = None,
                  faces: tuple[Face, ...] = None,
                  transform: Transform = Transform(),
-                 position: Vector3D = Vector3D.zero()
+                 position: Vector3D = Vector3D.zero(),
+                 rotation: Vector3D = Vector3D.one(),
+                 scale: Vector3D = Vector3D.one()
                  ):
 
         self.pointsOrigin = points if points is not None else []
-        self.points = tuple(point + position for point in self.pointsOrigin)
+        self.points = list(point + position for point in self.pointsOrigin)
         self.faces = faces if faces is not None else []
         self.transform = transform
         self.position = position
-
+        self.rotation = rotation
+        self.scale = scale

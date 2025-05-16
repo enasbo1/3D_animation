@@ -1,5 +1,6 @@
 import pygame as pyg
 
+from backwork.Vector3D import Vector3D
 from engine.render import Mesh
 from engine.worker import GameMaster, PygIO
 from scripts.Menu import Menu
@@ -35,9 +36,25 @@ class MainGame(GameMaster):
 
     def update(self):
         self.menuInputs()
-
         if self.treatment is not None:
             self.treatment.update()
+
+        if self.mesh is not None:
+            if self.worker.keysInput[pyg.K_LEFT]:
+                newPos = self.mesh.position + Vector3D(0, 1, 0)
+                self.mesh.position = newPos
+
+            if self.worker.keysInput[pyg.K_RIGHT]:
+                newPos = self.mesh.position + Vector3D(0, -1, 0)
+                self.mesh.position = newPos
+
+            if self.worker.keysInput[pyg.K_UP]:
+                newPos = self.mesh.position + Vector3D(1, 0, 0)
+                self.mesh.position = newPos
+
+            if self.worker.keysInput[pyg.K_DOWN]:
+                newPos = self.mesh.position + Vector3D(-1, 0, 0)
+                self.mesh.position = newPos
         pass
 
     def show_over(self, pygIO: PygIO):
@@ -71,9 +88,9 @@ class MainGame(GameMaster):
                 self.changeMenu(2)
 
         elif self.menu.menuToDisplay == 1:
-            if self.worker.keysInput[pyg.K_0]:
-                self.keyPressed = pyg.K_0
-                self.changeMesh(Pyramid().mesh)
+            # if self.worker.keysInput[pyg.K_0]:
+            #     self.keyPressed = pyg.K_0
+            #     self.changeMesh(Pyramid().mesh)
             if self.worker.keysInput[pyg.K_1]:
                 self.keyPressed = pyg.K_1
                 self.changeMesh(Cube().mesh)

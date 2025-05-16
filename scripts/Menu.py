@@ -19,7 +19,7 @@ class Menu:
         boxPosY = 200
         pygIO.draw_rect(boxPosX, boxPosY + 20, 500, 2000, "#000000")
         pygIO.draw_text(boxPosX + 20, boxPosY + 60, "Mesh to display:", 30, "#FFFFFF", False)
-        pygIO.draw_text(boxPosX + 20, boxPosY + 100, "0: Pyramid", 30, "#FFFFFF", False)
+        # pygIO.draw_text(boxPosX + 20, boxPosY + 100, "0: Pyramid", 30, "#FFFFFF", False)
         pygIO.draw_text(boxPosX + 20, boxPosY + 140, "1: Cube", 30, "#FFFFFF", False)
         pygIO.draw_text(boxPosX + 20, boxPosY + 180, "9: Return", 30, "#FFFFFF", False)
 
@@ -34,6 +34,5 @@ class Menu:
         pygIO.draw_text(boxPosX + 20, boxPosY + 140, "1: Test treatment", 30, "#FFFFFF", False)
         pygIO.draw_text(boxPosX + 20, boxPosY + 180, "2: Matrice rotation", 30, "#FFFFFF", False)
         pygIO.draw_text(boxPosX + 20, boxPosY + 220, "3: Quaternion rotation", 30, "#FFFFFF", False)
-        pygIO.draw_text(boxPosX + 20, boxPosY + 260, "4: Not Centered Rotation", 30, "#FFFFFF", False)
         pygIO.draw_text(boxPosX + 20, boxPosY + 300, "9: Return", 30, "#FFFFFF", False)
         pass

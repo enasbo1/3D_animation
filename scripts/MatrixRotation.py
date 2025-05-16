@@ -53,44 +53,29 @@ class MatrixRotation:
 
 class ObjectRotationMatrix:
     mesh: Mesh
-    original_points: list[Vector3D]
-    current_points: list[Vector3D]
-    cube_position: Vector3D
-    angle_x: float
-    angle_y: float
-    angle_z: float
     rotation_speed: float
     operation_count: float
 
     def init(self, mesh):
         self.mesh = mesh
 
-        # Convert cube point with scale change
-        scale = 1
-        self.original_points = [Vector3D(p.x * scale, p.y * scale, p.z * scale) for p in self.mesh.pointsOrigin]
-        self.current_points = self.original_points.copy()  # Points après rotation
-
-        # Position du cube devant la caméra
-        self.cube_position = Vector3D(10, 0, 0)
-
-        self.angle_x = 0
-        self.angle_y = 0
-        self.angle_z = 0
-
         self.rotation_speed = 0.005
         self.operation_count = 0
 
     def update(self):
-        self.angle_x += self.rotation_speed
-        self.angle_y += self.rotation_speed / 2
-        self.angle_z += self.rotation_speed / 3
+        mesh = self.mesh
+
+        # update rotation angles
+        mesh.rotation.x += self.rotation_speed
+        mesh.rotation.y += self.rotation_speed / 2
+        mesh.rotation.z += self.rotation_speed / 3
 
         self.operation_count = 0
 
         # Create les matrices de rotation
-        mat_x = MatrixRotation.rotation_x(self.angle_x)
-        mat_y = MatrixRotation.rotation_y(self.angle_y)
-        mat_z = MatrixRotation.rotation_z(self.angle_z)
+        mat_x = MatrixRotation.rotation_x(mesh.rotation.x)
+        mat_y = MatrixRotation.rotation_y(mesh.rotation.y)
+        mat_z = MatrixRotation.rotation_z(mesh.rotation.z)
 
         # Combiner les matrices (multiplication matricielle)
         combined_matrix = [
@@ -120,20 +105,20 @@ class ObjectRotationMatrix:
                     self.operation_count += 1
 
         # Appliquer la matrice de rotation à tous les points
-        for i, original in enumerate(self.original_points):
+        for i, original in enumerate(mesh.pointsOrigin):
             # Appliquer la rotation par matrice
             rotated = MatrixRotation.apply_matrix(original, final_matrix)
             self.operation_count += 1
 
-            # Déplacer à la position finale
-            self.current_points[i] = rotated + self.cube_position
-
-        # Mettre à jour le mesh avec les points tournés
-        self.mesh.points = tuple(self.current_points)
+            # Move to final pos
+            mesh.points[i] = rotated + mesh.position
 
     def show_over(self, pygIO: PygIO):
+        mesh = self.mesh
+        print(mesh.points[0].x, mesh.points[0].y, mesh.points[0].z)
+        print(mesh.pointsOrigin[0].x, mesh.pointsOrigin[0].y, mesh.pointsOrigin[0].z)
         pygIO.draw_text(-500, 0,
-                        f"Rotation Matrice: X={self.angle_x:.2f}, Y={self.angle_y:.2f}, Z={self.angle_z:.2f}",
+                        f"Rotation Matrice: X={mesh.rotation.x:.2f}, Y={mesh.rotation.y:.2f}, Z={mesh.rotation.z:.2f}",
                         20, pygame.Color(255, 255, 255))
         pygIO.draw_text(-580, 30,
                         f"Opérations: {self.operation_count}",

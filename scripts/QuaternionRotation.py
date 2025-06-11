@@ -44,9 +44,11 @@ class ObjectRotationQuaternion:
         self.operation_count += 7
 
     def show_over(self, pygIO: PygIO):
-        pygIO.draw_text(-500, 0,
+        pygIO.draw_text(-850, -470,
                         f"Rotation Quaternion: {self.transform.rotation}",
-                        20, pygame.Color(255, 255, 255))
-        pygIO.draw_text(-591, 30,
+                        30, pygame.Color(255, 255, 255),
+                        False)
+        pygIO.draw_text(-850, -430,
                         f"Opérations: {self.operation_count}",
-                        20, pygame.Color(255, 255, 255))
+                        30, pygame.Color(255, 255, 255),
+                        False)

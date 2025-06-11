@@ -20,7 +20,7 @@ class Quaternion:
         return Quaternion(1, 0, 0, 0)
 
     def __str__(self):
-        return f"({self.r}, {self.i}, {self.j}, {self.k})"
+        return f"({round(self.r, 5)}, {round(self.i, 5)}, {round(self.j, 5)}, {round(self.k, 5)})"
 
     def __add__(self, other):
         return Quaternion(
@@ -47,7 +47,7 @@ class Quaternion:
         )
 
     def __repr__(self):
-        return f"Quaternion({self.r}, {self.i}, {self.j}, {self.k})"
+        return f"Quaternion({round(self.r, 4)}, {self.i}, {self.j}, {self.k})"
 
     def conj(self):
         return Quaternion(self.r, -self.i, -self.j, -self.k)

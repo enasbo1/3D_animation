@@ -41,12 +41,14 @@ class ObjectRotationQuaternion:
 
         # Update Rotation angle
         self.transform.rotation = self.transform.rotation * Quaternion.rotation(self.axe, self.worker.deltaTime)
-        self.operation_count += 7
+        self.operation_count += 13  # 12 if axis_norm <= 0
 
     def show_over(self, pygIO: PygIO):
-        pygIO.draw_text(-500, 0,
+        pygIO.draw_text(-850, -470,
                         f"Rotation Quaternion: {self.transform.rotation}",
-                        20, pygame.Color(255, 255, 255))
-        pygIO.draw_text(-591, 30,
+                        30, pygame.Color(255, 255, 255),
+                        False)
+        pygIO.draw_text(-850, -430,
                         f"Opérations: {self.operation_count}",
-                        20, pygame.Color(255, 255, 255))
+                        30, pygame.Color(255, 255, 255),
+                        False)

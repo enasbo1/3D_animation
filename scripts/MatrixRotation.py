@@ -2,7 +2,6 @@ import pygame
 import math
 
 from backwork.Quaternion import Quaternion
-from backwork.Vector3D import Vector3D
 from engine.worker import PygIO, Worker
 from meshs.Mesh import Mesh
 from scripts.Transform3D import Transform3D

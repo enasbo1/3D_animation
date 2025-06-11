@@ -26,6 +26,7 @@ class Mesh:
     points: list[Vector3D]
     faces: tuple[Face, ...]
     transformedPoints = property(lambda self: self.transform.apply(self))
+    name: str = None
 
     def __init__(self,
                  points: list[Vector3D] = None,

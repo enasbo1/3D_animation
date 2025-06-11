@@ -27,3 +27,5 @@ class Cube(Mesh):
             ),
             transform=transform
         )
+
+        self.name = "Cube"

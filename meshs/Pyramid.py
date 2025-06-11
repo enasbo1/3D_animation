@@ -25,3 +25,5 @@ class Pyramid(Mesh):
             ),
             transform=transform
         )
+
+        self.name = "Pyramid"

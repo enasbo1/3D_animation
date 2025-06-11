@@ -155,12 +155,14 @@ class MainGame(GameMaster):
         self.worker.renderer.mesh.append(mesh)
 
     def changeMesh(self, meshIndex: int):
-        meshIndex += self.menu.meshListOffset
+        meshIndex += self.menu.meshListOffset - 1
         if meshIndex < len(self.meshList):
             self.mesh = self.meshList[meshIndex]
 
     def changeTreatment(self, treatment):
         if self.mesh is not None:
+
             self.treatment = treatment
             if self.treatment is not None:
                 self.treatment.init(self.mesh)
+                self.treatment.transform = self.mesh.transform

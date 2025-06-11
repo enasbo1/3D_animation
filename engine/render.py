@@ -41,7 +41,7 @@ class Render:
         if len(self.mesh)==1:
             _faces:list[Face] = list(self.mesh[0].faces)
         else:
-            _faces:list[Face] = list(concat(*[m.faces for m in self.mesh]))
+            _faces:list[Face] = [face for m in self.mesh for face in m.faces]
 
         _faces.sort(key = lambda x:x.camDist, reverse=True)
 

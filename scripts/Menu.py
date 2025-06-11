@@ -34,13 +34,13 @@ class Menu:
         pygIO.draw_text(boxPosX + 20, boxPosY + 100, "0: up", 30, "#FFFFFF", False)
 
         i = 0
-        while len(meshList) > i + self.meshListOffset >= 0 and i < 3:
+        while len(meshList) > i + self.meshListOffset >= 0 and i < 2:
             mesh = meshList[i + self.meshListOffset]
             boxPosY += 40
             if mesh.name is not None:
                 pygIO.draw_text(boxPosX + 20, boxPosY + 100, str(i + 1) + ": " + mesh.name, 30, "#FFFFFF", False)
             else:
-                pygIO.draw_text(boxPosX + 20, boxPosY + 100, str(i + 1) + ": Camera", 30, "#FFFFFF", False)
+                pygIO.draw_text(boxPosX + 20, boxPosY + 100, str(i + 1) + ": WIP", 30, "#FFFFFF", False)
             i += 1
 
         pygIO.draw_text(boxPosX + 20, boxPosY + 140, "3: down", 30, "#FFFFFF", False)

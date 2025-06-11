@@ -38,3 +38,7 @@ class Mesh:
         self.points = [] if points is None else points
         self.faces = tuple() if faces is None else faces
         self.transform = transform
+
+    def scale(self, mult: float):
+        for pointI in range(len(self.points)):
+            self.points[pointI] *= mult

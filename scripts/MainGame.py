@@ -62,6 +62,12 @@ class MainGame(GameMaster):
 
             if self.worker.keysInput[pyg.K_r]:
                 self.mesh.transform.position += Vector3D(0, 0, -1) * self.worker.deltaTime
+
+            if self.worker.keysInput[pyg.K_o]:
+                self.mesh.scale(1 + self.worker.deltaTime)
+
+            if self.worker.keysInput[pyg.K_i]:
+                self.mesh.scale(1 - self.worker.deltaTime)
         pass
 
     def show_over(self, pygIO: PygIO):
@@ -90,54 +96,54 @@ class MainGame(GameMaster):
             return
 
         if self.menu.menuToDisplay == 0:
-            if self.worker.keysInput[pyg.K_0]:
-                self.keyPressed = pyg.K_0
-                self.changeMenu(1)
             if self.worker.keysInput[pyg.K_1]:
                 self.keyPressed = pyg.K_1
-                self.changeMenu(2)
+                self.changeMenu(1)
             if self.worker.keysInput[pyg.K_2]:
                 self.keyPressed = pyg.K_2
+                self.changeMenu(2)
+            if self.worker.keysInput[pyg.K_3]:
+                self.keyPressed = pyg.K_3
                 self.changeMenu(3)
 
         elif self.menu.menuToDisplay == 1:
-            if self.worker.keysInput[pyg.K_0]:
-                self.keyPressed = pyg.K_0
-                self.addMesh(0)
             if self.worker.keysInput[pyg.K_1]:
                 self.keyPressed = pyg.K_1
+                self.addMesh(0)
+            if self.worker.keysInput[pyg.K_2]:
+                self.keyPressed = pyg.K_2
                 self.addMesh(1)
 
         elif self.menu.menuToDisplay == 2:
-            if self.worker.keysInput[pyg.K_0]:
-                self.keyPressed = pyg.K_0
-                self.menu.meshListOffset -= 1
             if self.worker.keysInput[pyg.K_1]:
                 self.keyPressed = pyg.K_1
-                self.changeMesh(1)
+                self.menu.meshListOffset -= 1
             if self.worker.keysInput[pyg.K_2]:
                 self.keyPressed = pyg.K_2
-                self.changeMesh(2)
+                self.changeMesh(1)
             if self.worker.keysInput[pyg.K_3]:
                 self.keyPressed = pyg.K_3
+                self.changeMesh(2)
+            if self.worker.keysInput[pyg.K_4]:
+                self.keyPressed = pyg.K_4
                 self.menu.meshListOffset += 1
 
         elif self.menu.menuToDisplay == 3:
-            if self.worker.keysInput[pyg.K_0]:
-                self.keyPressed = pyg.K_0
-                self.changeTreatment(None)
             if self.worker.keysInput[pyg.K_1]:
                 self.keyPressed = pyg.K_1
-                self.changeTreatment(self.test)
+                self.changeTreatment(None)
             if self.worker.keysInput[pyg.K_2]:
                 self.keyPressed = pyg.K_2
-                self.changeTreatment(self.matrixRotate)
+                self.changeTreatment(self.test)
             if self.worker.keysInput[pyg.K_3]:
                 self.keyPressed = pyg.K_3
+                self.changeTreatment(self.matrixRotate)
+            if self.worker.keysInput[pyg.K_4]:
+                self.keyPressed = pyg.K_4
                 self.changeTreatment(self.quaternionRotate)
 
-        if self.worker.keysInput[pyg.K_9]:
-            self.keyPressed = pyg.K_9
+        if self.worker.keysInput[pyg.K_0]:
+            self.keyPressed = pyg.K_0
             self.changeMenu(0)
 
     def changeMenu(self, menu: int):

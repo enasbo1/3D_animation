@@ -1,13 +1,23 @@
 import math
 
+from numpy.f2py.auxfuncs import throw_error
+
 from backwork.Vector2D import Vector2D
 from backwork.dddirection import avixyz
 
 class IVector3D:
+
     x:float
     y:float
     z:float
+    norm:float
+    coord:tuple[float, float]
 
+    def __get_squareNorm(self)->float:
+        throw_error("not implemented");
+        pass
+
+    squareNorm:float = property(__get_squareNorm)
 class Vector3D(IVector3D):
     def __init__(self, x:float, y:float, z:float):
         self.__coord:tuple[float, float, float] = (x, y, z)
@@ -66,6 +76,9 @@ class Vector3D(IVector3D):
     def __set_z(self, z:float):
         self.__coord = (self.x, self.y, z);
 
+    def __get_squareNorm(self)->float:
+        return self.__get_x()**2+self.__get_y()**2+self.__get_z()**2
+
     def __get_norm(self)->float:
         return math.sqrt(self.__get_x()**2+self.__get_y()**2+self.__get_z()**2)
 
@@ -81,7 +94,7 @@ class Vector3D(IVector3D):
         """ produit scalaire entre deux vecteurs """
         return (self.x * other.x) + (self.y * other.y) + (self.z * other.z)
 
-    def cross(self, other):
+    def cross(self, other) -> IVector3D:
         """ produit vectoriel entre deux vecteurs """ 
         return Vector3D(
             self.y * other.z - self.z * other.y,
@@ -94,3 +107,4 @@ class Vector3D(IVector3D):
     y:float = property(__get_y, __set_y)
     z:float = property(__get_z, __set_z)
     norm:float = property(__get_norm, __set_norm)
+    squareNorm:float = property(__get_squareNorm)

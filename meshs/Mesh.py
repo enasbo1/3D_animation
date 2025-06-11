@@ -9,6 +9,7 @@ class Face:
     color: pyg.Color
     camDist: float
     pointPers: tuple[Vector2D, ...]
+    light: float = 1
 
     def __init__(self, pointIndex: tuple[int, int, int] | tuple[int, int, int, int] = tuple(),
                  color: pyg.Color = pyg.Color(150, 150, 150)):

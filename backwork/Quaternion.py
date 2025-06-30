@@ -54,6 +54,14 @@ class Quaternion:
             self.r * other.k + self.i * other.j - self.j * other.i + self.k * other.r
         )
 
+    def __truediv__(self, other:float):
+        return Quaternion(
+            self.r/other,
+            self.i/other,
+            self.j/other,
+            self.k/other
+        )
+
     def __repr__(self):
         return f"Quaternion({round(self.r, 4)}, {self.i}, {self.j}, {self.k})"
 

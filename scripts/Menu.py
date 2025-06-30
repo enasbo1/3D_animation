@@ -1,10 +1,19 @@
 from engine.worker import PygIO
 from meshs.Mesh import Mesh
 
+MENU_KEYS = {
+    "SELECT_MODE": 0,
+    "ADD_MESH": 1,
+    "CHANGE_MESH": 2,
+    "SELECT_TREATMENT": 3,
+    "SET_MESH_ROTATION": 4
+}
+
 
 class Menu:
     menuToDisplay: int = 0
     meshListOffset: int = 0
+    rotationSet: int = 0
 
     @staticmethod
     def selectMode(pygIO: PygIO):
@@ -15,6 +24,7 @@ class Menu:
         pygIO.draw_text(boxPosX + 20, boxPosY + 100, "1: Add Mesh", 30, "#FFFFFF", False)
         pygIO.draw_text(boxPosX + 20, boxPosY + 140, "2: Select Object", 30, "#FFFFFF", False)
         pygIO.draw_text(boxPosX + 20, boxPosY + 180, "3: Select Treatment", 30, "#FFFFFF", False)
+        pygIO.draw_text(boxPosX + 20, boxPosY + 220, "4: Set Mesh Quaternion", 30, "#FFFFFF", False)
 
     @staticmethod
     def addMesh(pygIO: PygIO):
@@ -57,4 +67,20 @@ class Menu:
         pygIO.draw_text(boxPosX + 20, boxPosY + 180, "3: Matrice rotation", 30, "#FFFFFF", False)
         pygIO.draw_text(boxPosX + 20, boxPosY + 220, "4: Quaternion rotation", 30, "#FFFFFF", False)
         pygIO.draw_text(boxPosX + 20, boxPosY + 260, "0: Return", 30, "#FFFFFF", False)
+        pass
+
+    def setRotation(self, pygIO: PygIO, inputText: str):
+        boxPosX = -pygIO.width // 2
+        boxPosY = pygIO.height // 2 - 300
+        pygIO.draw_rect(boxPosX, boxPosY + 20, 500, 2000, "#000000")
+        pygIO.draw_text(boxPosX + 20, boxPosY + 60, "Set rotation:", 30, "#FFFFFF", False)
+        if self.rotationSet == 0:
+            pygIO.draw_text(boxPosX + 20, boxPosY + 100, "R: " + inputText, 30, "#FFFFFF", False)
+        elif self.rotationSet == 1:
+            pygIO.draw_text(boxPosX + 20, boxPosY + 100, "I: " + inputText, 30, "#FFFFFF", False)
+        elif self.rotationSet == 2:
+            pygIO.draw_text(boxPosX + 20, boxPosY + 100, "J: " + inputText, 30, "#FFFFFF", False)
+        elif self.rotationSet == 3:
+            pygIO.draw_text(boxPosX + 20, boxPosY + 100, "K: " + inputText, 30, "#FFFFFF", False)
+        pygIO.draw_text(boxPosX + 20, boxPosY + 260, "N: Next", 30, "#FFFFFF", False)
         pass

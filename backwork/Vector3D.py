@@ -40,6 +40,13 @@ class Vector3D(IVector3D):
     def project_h(self) -> Vector2D:
         return Vector2D(self.x, self.y)
 
+    def __eq__(self, other):
+        if not isinstance(other, Vector3D):
+            return NotImplemented
+        return (math.isclose(self.x, other.x) and
+                math.isclose(self.y, other.y) and
+                math.isclose(self.z, other.z))
+
     def __add__(self, other:IVector3D):
         return Vector3D(self.x + other.x, self.y + other.y, self.z + other.z)
 

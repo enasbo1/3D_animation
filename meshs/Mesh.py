@@ -53,15 +53,25 @@ class Mesh:
     def playAnim(self):
         currentTransform = self.transform
         nextTransform = self.animation[self.animationNext]
-        speed = 0.01
+        rotSpeed = 0.002
+        trsSpeed = 0.005
 
         if currentTransform.rotation != nextTransform.rotation:
             currentTransform.rotation = Quaternion(
-                approach(currentTransform.rotation.r, nextTransform.rotation.r, speed),
-                approach(currentTransform.rotation.i, nextTransform.rotation.i, speed),
-                approach(currentTransform.rotation.j, nextTransform.rotation.j, speed),
-                approach(currentTransform.rotation.k, nextTransform.rotation.k, speed)
+                approach(currentTransform.rotation.r, nextTransform.rotation.r, rotSpeed),
+                approach(currentTransform.rotation.i, nextTransform.rotation.i, rotSpeed),
+                approach(currentTransform.rotation.j, nextTransform.rotation.j, rotSpeed),
+                approach(currentTransform.rotation.k, nextTransform.rotation.k, rotSpeed)
             )
+
+        if currentTransform.position != nextTransform.position:
+            currentTransform.position = Vector3D(
+                approach(currentTransform.position.x, nextTransform.position.x, trsSpeed),
+                approach(currentTransform.position.y, nextTransform.position.y, trsSpeed),
+                approach(currentTransform.position.z, nextTransform.position.z, trsSpeed)
+            )
+
+        if currentTransform.rotation != nextTransform.rotation or currentTransform.position != nextTransform.position:
             return
 
         self.animationCurrent = self.animationNext

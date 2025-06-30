@@ -28,6 +28,8 @@ class Render:
     def show(self, cam: Camera, pygio : PygIO, vertice:bool = False, edge:bool = False):
         a_points = []
         for m in self.mesh:
+            if m.animationPlay:
+                m.playAnim()
             tr_points = m.transformedPoints
             points = tuple(per_point(pygio.width, pygio.height, cam, cam.d, cam.v, p) for p in tr_points)
             for i,j in enumerate(points):

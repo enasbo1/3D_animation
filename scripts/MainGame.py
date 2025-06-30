@@ -91,8 +91,8 @@ class MainGame(GameMaster):
         pass
 
     def fixedUpdate(self):
-        if self.mesh is not None and self.mesh.animationPlay:
-            self.mesh.playAnim()
+        # if self.mesh is not None and self.mesh.animationPlay:
+        #     self.mesh.playAnim()
 
         if self.treatment is not None:
             self.treatment.update()

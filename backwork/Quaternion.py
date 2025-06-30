@@ -19,6 +19,14 @@ class Quaternion:
     def identity():
         return Quaternion(1, 0, 0, 0)
 
+    def __eq__(self, other):
+        if not isinstance(other, Quaternion):
+            return NotImplemented
+        return (math.isclose(self.r, other.r) and
+                math.isclose(self.i, other.i) and
+                math.isclose(self.j, other.j) and
+                math.isclose(self.k, other.k))
+
     def __str__(self):
         return f"({round(self.r, 5)}, {round(self.i, 5)}, {round(self.j, 5)}, {round(self.k, 5)})"
 

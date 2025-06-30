@@ -29,7 +29,7 @@ class MainGame(GameMaster):
     pyramid: Mesh
 
     keyPressed: int = 0
-    inputText: str = ""
+    inputText: str = "0"
     newQtn = list[float]
 
     def onCreate(self):
@@ -91,6 +91,9 @@ class MainGame(GameMaster):
         pass
 
     def fixedUpdate(self):
+        if self.mesh is not None and self.mesh.animationPlay:
+            self.mesh.playAnim()
+
         if self.treatment is not None:
             self.treatment.update()
 
@@ -103,18 +106,19 @@ class MainGame(GameMaster):
         if self.menu.menuToDisplay == MENU_KEYS["SELECT_MODE"]:
             if self.worker.keysInput[pyg.K_1]:
                 self.keyPressed = pyg.K_1
-                self.changeMenu(MENU_KEYS["ADD_MESH"])
+                self.menu.meshListOffset -= 1
             if self.worker.keysInput[pyg.K_2]:
                 self.keyPressed = pyg.K_2
-                self.changeMenu(MENU_KEYS["CHANGE_MESH"])
+                self.changeMenu(self.menu.meshListOffset + 1)
             if self.worker.keysInput[pyg.K_3]:
                 self.keyPressed = pyg.K_3
-                self.changeMenu(MENU_KEYS["SELECT_TREATMENT"])
+                self.changeMenu(self.menu.meshListOffset + 2)
             if self.worker.keysInput[pyg.K_4]:
                 self.keyPressed = pyg.K_4
-                self.inputText = ""
-                self.newQtn = list()
-                self.changeMenu(MENU_KEYS["SET_MESH_ROTATION"])
+                self.changeMenu(self.menu.meshListOffset + 3)
+            if self.worker.keysInput[pyg.K_5]:
+                self.keyPressed = pyg.K_5
+                self.menu.meshListOffset += 1
 
         elif self.menu.menuToDisplay == MENU_KEYS["ADD_MESH"]:
             if self.worker.keysInput[pyg.K_1]:
@@ -169,14 +173,17 @@ class MainGame(GameMaster):
                         self.menu.rotationSet += 1
                         print(self.inputText)
                         self.newQtn.append(float(self.inputText))
-                        self.inputText = ""
+                        self.inputText = "0"
+                    elif event.key == pyg.K_p:
+                        self.keyPressed = pyg.K_0
+                        self.changeMenu(0)
                     else:
                         self.inputText += event.unicode
             # if self.worker.keysInput[pyg.K_BACKSPACE]:
             #     self.inputText = self.inputText[:-1]
             # elif self.worker.keysInput[pyg.K_KP_ENTER]:
             #     self.menu.rotationSet += 1
-            #     self.inputText = ""
+            #     self.inputText = "0"
             # elif self.keyPressed != -1:
             #     self.inputText += self.worker.keysInput
 
@@ -185,8 +192,16 @@ class MainGame(GameMaster):
             self.changeMenu(0)
 
     def changeMenu(self, menu: int):
-        self.menu.rotationSet = 0
-        self.menu.menuToDisplay = menu
+        if menu == MENU_KEYS["ADD_ANIM_TO_MESH"]:
+            self.mesh.animation.append(self.mesh.transform.copy())
+        elif menu == MENU_KEYS["PLAY_ANIMATION"]:
+            self.mesh.animationPlay = not self.mesh.animationPlay
+            pass
+        else:
+            self.newQtn = list()
+            self.menu.rotationSet = 0
+            self.menu.meshListOffset = 0
+            self.menu.menuToDisplay = menu
 
     def addMesh(self, meshType: int):
         if meshType == 0:

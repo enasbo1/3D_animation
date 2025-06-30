@@ -7,3 +7,12 @@ def somme(*args):
             n+=i
         a = True
     return n
+
+
+def approach(a: float, b: float, speed: float) -> float:
+    if a < b:
+        return min(a + speed, b)
+    elif a > b:
+        return max(a - speed, b)
+    else:
+        return a

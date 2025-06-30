@@ -166,7 +166,8 @@ class Quaternion:
     
     def rotate_point(self, point: Vector3D) -> Vector3D:
         p = Quaternion(0, point.x, point.y, point.z)
-        q_conj = self.conj()
-        rotated = self * p * q_conj
+        normalized = self / self.norm()
+        q_conj = normalized.conj()
+        rotated = normalized * p * q_conj
         
         return Vector3D(rotated.i, rotated.j, rotated.k)
